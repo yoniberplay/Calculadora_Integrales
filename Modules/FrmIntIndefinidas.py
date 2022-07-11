@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter.font import BOLD
+from tkinter.font import *
 from sympy import *
 
 class frm_integral_indefinida(Frame):
@@ -195,6 +195,6 @@ class frm_integral_indefinida(Frame):
                                    command=lambda: self.setFuction("e("))
         self.num_natural_btn.grid(row=10, column=3)
 
-        self.integral_btn = Button(self, text="Integral", width=7, height=2, relief="solid", background="#0a729d",
+        self.integral_btn = Button(self, text="=", width=7, height=2, relief="solid", background="#0a729d",
                              command=self.resultado)
         self.integral_btn.grid(row=10, column=4)

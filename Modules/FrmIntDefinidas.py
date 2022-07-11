@@ -1,198 +1,240 @@
 from tkinter import *
-from tkinter.font import BOLD
+from tkinter.font import *
 from sympy import*
-
-
-x = Symbol('x')
 
 class frm_integral_definida(Frame):
     def __init__(self, root=None):
-        super().__init__(root,width=650,height=500,background="#e6ffd1")
+        super().__init__(root,width=650,height=500,background="white")
         self.root=root
         self.pack()
-        self.createWidget()
-    # Esta es la funcion para validar los campos y canturar el Entry que tiene el focus    
+        self.crear_widget()
+
+
     def setFuction(self,fuction):
-        if(self.BoxText.focus_get()==self.BoxText):
-            self.BoxText.insert(END,fuction)
-        elif(self.BoxTextLimiteInferior.focus_get()==self.BoxTextLimiteInferior):
-            self.BoxTextLimiteInferior.insert(END,fuction)
-        elif(self.BoxTextLimiteSuperior.focus_get()==self.BoxTextLimiteSuperior):
-            self.BoxTextLimiteSuperior.insert(END,fuction)
+        if(self.funcion_entry.focus_get()==self.funcion_entry):
+            self.funcion_entry.insert(END, fuction)
+        elif(self.limite_inferior_entry.focus_get() == self.limite_inferior_entry):
+            self.limite_inferior_entry.insert(END, fuction)
+        elif(self.limite_superior_entry.focus_get() == self.limite_superior_entry):
+            self.limite_superior_entry.insert(END, fuction)
 
-    
-    def clearTextInputAll(self):
-        
-        if(self.BoxText.focus_get()==self.BoxText):
-            self.BoxText.delete(0,END) 
-        elif(self.BoxTextLimiteInferior.focus_get()==self.BoxTextLimiteInferior):
-            self.BoxTextLimiteInferior.delete(0,END)  
-        elif(self.BoxTextLimiteSuperior.focus_get()==self.BoxTextLimiteSuperior): 
-            self.BoxTextLimiteSuperior.delete(0,END)   
-        elif(self.BoxText1.focus_get()==self.BoxText1):
-            self.BoxText1.delete(0,END)   
-    def ClerarAll(self):
-        self.BoxText1.config(state="normal")
-        self.BoxText.delete(0,END) 
-        self.BoxText1.delete(0,END)
-        self.BoxTextLimiteInferior.delete(0,END)
-        self.BoxTextLimiteSuperior.delete(0,END) 
-        self.BoxText.focus()
+    def limpiar_todo(self):
+        self.resultado_entry.config(state="normal")
+        self.funcion_entry.delete(0, END)
+        self.resultado_entry.delete(0, END)
+        self.limite_inferior_entry.delete(0, END)
+        self.limite_superior_entry.delete(0, END)
+        self.funcion_entry.focus()
 
-    def clearTextInputOne(self):
-        
-        if(self.BoxText.focus_get()==self.BoxText):
-            contador=self.BoxText.get()
+    def backspace(self):
+
+        if(self.funcion_entry.focus_get()==self.funcion_entry):
+            contador=self.funcion_entry.get()
+            contador=len(contador) - 1
+            self.funcion_entry.delete(contador, END)
+        elif(self.limite_inferior_entry.focus_get() == self.limite_inferior_entry):
+            contador=self.limite_inferior_entry.get()
             contador=len(contador)
             contador-=1
-            self.BoxText.delete(contador,END)
-        elif(self.BoxTextLimiteInferior.focus_get()==self.BoxTextLimiteInferior):   
-            contador=self.BoxTextLimiteInferior.get()
-            contador=len(contador)
-            contador-=1
-            self.BoxTextLimiteInferior.delete(contador,END)
+            self.limite_inferior_entry.delete(contador, END)
             
-        elif(self.BoxTextLimiteSuperior.focus_get()==self.BoxTextLimiteSuperior):   
-            contador=self.BoxTextLimiteSuperior.get()
+        elif(self.limite_superior_entry.focus_get() == self.limite_superior_entry):
+            contador=self.limite_superior_entry.get()
             contador=len(contador)
             contador-=1
-            self.BoxTextLimiteSuperior.delete(contador,END)
-        elif(self.BoxText1.focus_get()==self.BoxText1):   
-            contador=self.BoxText1.get()
+            self.limite_superior_entry.delete(contador, END)
+        elif(self.resultado_entry.focus_get() == self.resultado_entry):
+            contador=self.resultado_entry.get()
             contador=len(contador)
             contador-=1
-            self.BoxText1.delete(contador,END)
+            self.resultado_entry.delete(contador, END)
             
     ##--------------> Funcion para integrar<---------------------------------
-    def integrar(self):
+    def resultado(self):
         try:
-            if(self.BoxText.get()!="" and self.BoxTextLimiteInferior.get()!="" and self.BoxTextLimiteSuperior.get()!=""):
-                self.BoxText1.delete(0,END)
-                self.BoxText1.insert(END,integrate(self.BoxText.get(), (x, self.BoxTextLimiteInferior.get(), self.BoxTextLimiteSuperior.get())))
-                self.BoxText1.config(state="disabled")
+            sym = None
+            funcion_string = self.funcion_entry.get()
+            if("x" in funcion_string):
+                sym = Symbol("x")
+            elif("y" in funcion_string):
+                sym = Symbol("y")
+
+            if(self.funcion_entry.get()!= "" and self.limite_inferior_entry.get()!= "" and self.limite_superior_entry.get()!= ""):
+                self.resultado_entry.delete(0, END)
+                self.resultado_entry.insert(END, integrate(self.funcion_entry.get(), (sym, self.limite_inferior_entry.get(), self.limite_superior_entry.get())))
+                self.resultado_entry.config(state="disabled")
             else:
-                self.BoxText1.delete(0,END)
-                self.BoxText1.insert(END,"Error..complete todos los campos.") 
+                self.resultado_entry.delete(0, END)
+                self.resultado_entry.insert(END, "Error..complete todos los campos.")
         except SympifyError:
-            self.BoxText1.insert(END,"Error.")
+            self.resultado_entry.insert(END, "Error.")
             
     ##--------------> creación de los widget<---------------------------------
-    def createWidget(self):
-        self.box=Button(self,text="*",padx=19,pady=10,relief="solid",background = "#e8cae2",command=lambda:self.setFuction("*"))
-        self.box.place(x=120,y=145)
-        
-        
-        self.bo7=Button(self,text="÷",padx=19,pady=10,relief="solid",background = "#e8cae2",command=lambda:self.setFuction("/"))
-        self.bo7.place(x=180,y=145)
-        
-        self.boDi=Button(self,text="+",padx=19,pady=10,relief="solid",background = "#e8cae2",command=lambda:self.setFuction("+"))
-        self.boDi.place(x=240,y=145)
-        
-        self.boRe=Button(self,text="-",padx=19,pady=10,relief="solid",background = "#e8cae2",command=lambda:self.setFuction("-"))
-        self.boRe.place(x=300,y=145)
-        
-        self.bo1=Button(self,text="1",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("1"))
-        self.bo1.place(x=120,y=195)
-        
-        self.bo2=Button(self,text="2",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("2"))
-        self.bo2.place(x=180,y=195)
-        
-        self.bo3=Button(self,text="3",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("3"))
-        self.bo3.place(x=240,y=195)
-        
-        self.boLog=Button(self,text="Log",padx=12,pady=10,relief="solid",background ="#abd3e3",command=lambda:self.setFuction("log("))
-        self.boLog.place(x=300,y=195)
-        
-        self.boSin=Button(self,text="sin",padx=12,pady=10,relief="solid",background ="#abd3e3",command=lambda:self.setFuction("sin("))
-        self.boSin.place(x=360,y=195)
-        
-        self.boCos=Button(self,text="cos",padx=12,pady=10,relief="solid",background ="#abd3e3",command=lambda:self.setFuction("cos("))
-        self.boCos.place(x=420,y=195)
-        
-        self.boTan=Button(self,text="tan",padx=12,pady=10,relief="solid",background ="#abd3e3",command=lambda:self.setFuction("tan("))
-        self.boTan.place(x=480,y=195)
-        
-        self.bo4=Button(self,text="4",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("4"))
-        self.bo4.place(x=120,y=245)
-        
-        self.bo5=Button(self,text="5",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("5"))
-        self.bo5.place(x=180,y=245)
-        
-        self.bo6=Button(self,text="6",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("6"))
-        self.bo6.place(x=240,y=245)
-        
-        self.boxVa=Button(self,text="x",padx=19,pady=10,relief="solid",background ="#abd3e3",command=lambda:self.setFuction("x"))
-        self.boxVa.place(x=300,y=245)
-        
-        self.boCsc=Button(self,text="csc",padx=12,pady=10,relief="solid",background ="#abd3e3",command=lambda:self.setFuction("csc("))
-        self.boCsc.place(x=360,y=245)
-        
-        self.boSec=Button(self,text="sec",padx=12,pady=10,relief="solid",background ="#abd3e3",command=lambda:self.setFuction("sec("))
-        self.boSec.place(x=420,y=245)
-        
-        self.boCot=Button(self,text="cot",padx=12,pady=10,relief="solid",background ="#abd3e3",command=lambda:self.setFuction("cot("))
-        self.boCot.place(x=480,y=245)
-        
-        self.bo7=Button(self,text="7",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("7"))
-        self.bo7.place(x=120,y=295)
-        
-        self.bo8=Button(self,text="8",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("8"))
-        self.bo8.place(x=180,y=295)
-        
-        self.bo9=Button(self,text="9",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("9"))
-        self.bo9.place(x=240,y=295)
-        
-        self.bo7=Button(self,text="x^",padx=15,pady=10,relief="solid",background ="#abd3e3",command=lambda:self.setFuction("x**"))
-        self.bo7.place(x=300,y=295)
-        
-        self.boPoten=Button(self,text="Limpiar\n todo",padx=61,pady=28,relief="solid",background="#f9f4af",command=self.ClerarAll)
-        self.boPoten.place(x=360,y=295)
-        
-        self.bo0=Button(self,text="0",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("0"))
-        self.bo0.place(x=120,y=345)
-        
-        self.boPunto=Button(self,text=".",padx=21,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("."))
-        self.boPunto.place(x=180,y=345)
-        
-        self.boEliTodo=Button(self,text="AC",padx=14,pady=10,relief="solid",background="#f9f4af",command=self.clearTextInputAll)
-        self.boEliTodo.place(x=240,y=345)
-        
-        self.boRaiz=Button(self,text="√",padx=18,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("sqrt("))
-        self.boRaiz.place(x=300,y=345)
-        
-        self.boParen=Button(self,text="(",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction("("))
-        self.boParen.place(x=120,y=395)
-        
-        self.boParent1=Button(self,text=")",padx=19,pady=10,relief="solid",background = "gray",command=lambda:self.setFuction(")"))
-        self.boParent1.place(x=180,y=395)
-        
-        self.boPi=Button(self,text="π",padx=19,pady=10,relief="solid",background="#abd3e3",command=lambda:self.setFuction("pi"))
-        self.boPi.place(x=240,y=395)
-        
-        self.bo7=Button(self,text="e",padx=19,pady=10,relief="solid",background="#abd3e3",command=lambda:self.setFuction("e("))
-        self.bo7.place(x=300,y=395)
-        
-        self.boDel1=Button(self,text="DEL",padx=19,pady=10,relief="solid",background="#f9f4af",command=self.clearTextInputOne)
-        self.boDel1.place(x=360,y=395)
-        
-        self.bointe=Button(self,text="Integrar",padx=23,pady=10,relief="solid",background="#0a729d",command=self.integrar)
-        self.bointe.place(x=435,y=395)
+    def crear_widget(self):
 
-        Label(self,text="Función",background="#e6ffd1",font=("verdana",8,BOLD)).place(x=120,y=10)
-        Label(self,text="Lim inferior",background="#e6ffd1",font=("verdana",8,BOLD)).place(x=350,y=10)
-        Label(self,text="Lim superior",background="#e6ffd1",font=("verdana",8,BOLD)).place(x=450,y=10)
-        Label(self,text="Resultado",background="#e6ffd1",font=("verdana",8,BOLD)).place(x=120,y=75)
-        Label(self,text="Fun. Trigonométricas",background="#e6ffd1",font=("verdana",9,BOLD)).place(x=376,y=158)
-        
-        self.BoxText=Entry(self,relief="solid",justify='center',font="Arial 13")
-        self.BoxText.place(x=120,y=40,width=200,height=30)
-        self.BoxText.focus()
-        
-        self.BoxTextLimiteInferior=Entry(self,relief="solid",justify='center',font="Arial 13")
-        self.BoxTextLimiteInferior.place(x=350,y=40,width=70,height=30)
-        
-        self.BoxTextLimiteSuperior=Entry(self,relief="solid",justify='center',font="Arial 13")
-        self.BoxTextLimiteSuperior.place(x=450,y=40,width=70,height=30)
-        
-        self.BoxText1=Entry(self,relief="solid",justify='center',font="Arial 13" )
-        self.BoxText1.place(x=120,y=100,width=398,height=40)
+        # Funcion y resultado
+        self.funcion_label = Label(self, text="Función", background="white", font=("verdana", 8, BOLD))
+        self.funcion_label.grid(row=0, column=0)
+
+        self.funcion_entry = Entry(self, relief="solid", justify='center', font="Arial 13", width=20)
+        self.funcion_entry.grid(row=1, column=0, columnspan=3, ipady=10)
+        self.funcion_entry.focus()
+
+        self.resultado_label = Label(self, text="Resultado", background="white", font=("verdana", 8, BOLD))
+        self.resultado_label.grid(row=2, column=0)
+
+        self.resultado_entry = Entry(self, relief="solid", justify='center', font="Arial 13", width=20)
+        self.resultado_entry.grid(row=3, column=0, columnspan=3, ipady=10, pady=10)
+
+        # Limite superior y inferior
+        self.limite_superior_label = Label(self, text="Limite superior", background="white", font=("verdana", 8, BOLD))
+        self.limite_superior_label.grid(row=0, column=3)
+
+        self.limite_superior_entry = Entry(self, relief="solid", justify='center', font="Arial 13", width=15)
+        self.limite_superior_entry.grid(row=1, column=3, columnspan=5, ipady=10, pady=10)
+
+        self.limite_inferior_label = Label(self, text="Limite inferior", background="white", font=("verdana", 8, BOLD))
+        self.limite_inferior_label.grid(row=2, column=3)
+
+        self.limite_inferior_entry = Entry(self, relief="solid", justify='center', font="Arial 13", width=15)
+        self.limite_inferior_entry.grid(row=3, column=3, columnspan=5, ipady=10, pady=10)
+
+        # Funciones Trigonometricas
+        self.sin_btn = Button(self, text="sin", relief="solid", width=7, height=2, background="#377DFF",
+                              command=lambda: self.setFuction("sin("))
+        self.sin_btn.grid(row=5, column=0)
+
+        self.cos_btn = Button(self, text="cos", relief="solid", width=7, height=2, background="#377DFF",
+                              command=lambda: self.setFuction("cos("))
+        self.cos_btn.grid(row=5, column=1)
+
+        self.tan_btn = Button(self, text="tan", relief="solid", width=7, height=2, background="#377DFF",
+                              command=lambda: self.setFuction("tan("))
+        self.tan_btn.grid(row=5, column=2, padx=5)
+
+        self.sec_btn = Button(self, text="sec", relief="solid", width=7, height=2, background="#377DFF",
+                              command=lambda: self.setFuction("sec("))
+        self.sec_btn.grid(row=6, column=0, pady=5)
+
+        self.csc_btn = Button(self, text="csc", relief="solid", width=7, height=2, background="#377DFF",
+                              command=lambda: self.setFuction("csc("))
+        self.csc_btn.grid(row=6, column=1)
+
+        self.cot_btn = Button(self, text="cot", relief="solid", width=7, height=2, background="#377DFF",
+                              command=lambda: self.setFuction("cot("))
+        self.cot_btn.grid(row=6, column=2)
+
+        # Teclado Numerico
+        self.uno_btn = Button(self, text="1", relief="solid", width=7, height=2, background="white",
+                              command=lambda: self.setFuction("1"))
+        self.uno_btn.grid(row=7, column=0, pady=5)
+
+        self.dos_btn = Button(self, text="2", relief="solid", width=7, height=2, background="white",
+                              command=lambda: self.setFuction("2"))
+        self.dos_btn.grid(row=7, column=1)
+
+        self.tres_btn = Button(self, text="3", relief="solid", width=7, height=2, background="white",
+                               command=lambda: self.setFuction("3"))
+        self.tres_btn.grid(row=7, column=2)
+
+        self.cuatro_btn = Button(self, text="4", relief="solid", width=7, height=2, background="white",
+                                 command=lambda: self.setFuction("4"))
+        self.cuatro_btn.grid(row=8, column=0, pady=5)
+
+        self.cinco_btn = Button(self, text="5", relief="solid", width=7, height=2, background="white",
+                                command=lambda: self.setFuction("5"))
+        self.cinco_btn.grid(row=8, column=1)
+
+        self.seis_btn = Button(self, text="6", relief="solid", width=7, height=2, background="white",
+                               command=lambda: self.setFuction("6"))
+        self.seis_btn.grid(row=8, column=2)
+
+        self.siete_btn = Button(self, text="7", relief="solid", width=7, height=2, background="white",
+                                command=lambda: self.setFuction("7"))
+        self.siete_btn.grid(row=9, column=0, pady=5)
+
+        self.ocho_btn = Button(self, text="8", relief="solid", width=7, height=2, background="white",
+                               command=lambda: self.setFuction("8"))
+        self.ocho_btn.grid(row=9, column=1)
+
+        self.nueve_btn = Button(self, text="9", relief="solid", width=7, height=2, background="white",
+                                command=lambda: self.setFuction("9"))
+        self.nueve_btn.grid(row=9, column=2)
+
+        self.punto_btn = Button(self, text=".", relief="solid", width=7, height=2, background="white",
+                                command=lambda: self.setFuction("."))
+        self.punto_btn.grid(row=10, column=0, pady=5)
+
+        self.cero_btn = Button(self, text="0", relief="solid", width=7, height=2, background="white",
+                               command=lambda: self.setFuction("0"))
+        self.cero_btn.grid(row=10, column=1)
+
+        self.pi_btn = Button(self, text="π", width=7, height=2, relief="solid", background="#377DFF",
+                             command=lambda: self.setFuction("pi"))
+        self.pi_btn.grid(row=10, column=2)
+
+        # Operaciones expeciales
+        self.abrir_parentesis_btn = Button(self, text="(", width=7, height=2, relief="solid", background="#377DFF",
+                                           command=lambda: self.setFuction("("))
+        self.abrir_parentesis_btn.grid(row=5, column=3)
+
+        self.cerrar_parentesis_btn = Button(self, text=")", width=7, height=2, relief="solid", background="#377DFF",
+                                            command=lambda: self.setFuction(")"))
+        self.cerrar_parentesis_btn.grid(row=5, column=4)
+
+        self.potencia_btn = Button(self, text="x^", width=7, height=2, relief="solid", background="#377DFF",
+                                   command=lambda: self.setFuction("**"))
+        self.potencia_btn.grid(row=6, column=3)
+
+        self.raiz_btn = Button(self, text="√", width=7, height=2, relief="solid", background="#377DFF",
+                               command=lambda: self.setFuction("sqrt("))
+        self.raiz_btn.grid(row=6, column=4)
+
+        self.log_btn = Button(self, text="Log", width=7, height=2, relief="solid", background="#377DFF",
+                              command=lambda: self.setFuction("log("))
+        self.log_btn.grid(row=4, column=0, pady=5)
+
+        self.variable_x_btn = Button(self, text="x", width=7, height=2, relief="solid", background="#377DFF",
+                                     command=lambda: self.setFuction("x"))
+        self.variable_x_btn.grid(row=4, column=1)
+
+        self.variable_y_btn = Button(self, text="y", width=7, height=2, relief="solid", background="#377DFF",
+                                     command=lambda: self.setFuction("y"))
+        self.variable_y_btn.grid(row=4, column=2)
+
+        # Botones de limpieza
+
+        self.ac_btn = Button(self, text="AC", relief="solid", width=7, height=2, background="#f0463a",
+                             command=self.limpiar_todo)
+        self.ac_btn.grid(row=7, column=3, padx=10)
+
+        self.del_btn = Button(self, text="DEL", relief="solid", width=7, height=2, background="#f0463a",
+                              command=self.backspace)
+        self.del_btn.grid(row=7, column=4)
+
+        # Operaciones aritmeticas
+        self.mas_btn = Button(self, text="+", width=7, height=2, relief="solid", background="gray",
+                              command=lambda: self.setFuction("+"))
+        self.mas_btn.grid(row=8, column=3)
+
+        self.menos_btn = Button(self, text="-", width=7, height=2, relief="solid", background="gray",
+                                command=lambda: self.setFuction("-"))
+        self.menos_btn.grid(row=8, column=4)
+
+        self.multiplicar_btn = Button(self, text="*", width=7, height=2, relief="solid", background="gray",
+                                      command=lambda: self.setFuction("*"))
+        self.multiplicar_btn.grid(row=9, column=3)
+
+        self.division_btn = Button(self, text="÷", width=7, height=2, relief="solid", background="gray",
+                                   command=lambda: self.setFuction("/"))
+        self.division_btn.grid(row=9, column=4)
+
+        # Boton de resultado y etc
+
+        self.num_natural_btn = Button(self, text="e", width=7, height=2, relief="solid", background="#377DFF",
+                                      command=lambda: self.setFuction("e("))
+        self.num_natural_btn.grid(row=10, column=3)
+
+        self.integral_btn = Button(self, text="=", width=7, height=2, relief="solid", background="#0a729d",
+                                   command=self.resultado)
+        self.integral_btn.grid(row=10, column=4)
