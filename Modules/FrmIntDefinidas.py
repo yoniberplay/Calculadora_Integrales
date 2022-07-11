@@ -1,13 +1,12 @@
 from tkinter import *
-from tkinter import messagebox as MessageBox
 from tkinter.font import BOLD
 from sympy import*
 
 
-x=Symbol('x')
+x = Symbol('x')
 
-class AppDefinida(Frame):
-    def __init__(self, root=  None):
+class frm_integral_definida(Frame):
+    def __init__(self, root=None):
         super().__init__(root,width=650,height=500,background="#e6ffd1")
         self.root=root
         self.pack()
@@ -33,11 +32,12 @@ class AppDefinida(Frame):
         elif(self.BoxText1.focus_get()==self.BoxText1):
             self.BoxText1.delete(0,END)   
     def ClerarAll(self):
+        self.BoxText1.config(state="normal")
         self.BoxText.delete(0,END) 
         self.BoxText1.delete(0,END)
         self.BoxTextLimiteInferior.delete(0,END)
         self.BoxTextLimiteSuperior.delete(0,END) 
-        self.BoxText.focus();  
+        self.BoxText.focus()
 
     def clearTextInputOne(self):
         
@@ -69,6 +69,7 @@ class AppDefinida(Frame):
             if(self.BoxText.get()!="" and self.BoxTextLimiteInferior.get()!="" and self.BoxTextLimiteSuperior.get()!=""):
                 self.BoxText1.delete(0,END)
                 self.BoxText1.insert(END,integrate(self.BoxText.get(), (x, self.BoxTextLimiteInferior.get(), self.BoxTextLimiteSuperior.get())))
+                self.BoxText1.config(state="disabled")
             else:
                 self.BoxText1.delete(0,END)
                 self.BoxText1.insert(END,"Error..complete todos los campos.") 
@@ -193,12 +194,5 @@ class AppDefinida(Frame):
         self.BoxTextLimiteSuperior=Entry(self,relief="solid",justify='center',font="Arial 13")
         self.BoxTextLimiteSuperior.place(x=450,y=40,width=70,height=30)
         
-        self.BoxText1=Entry(self,relief="solid",justify='center',font="Arial 13")
+        self.BoxText1=Entry(self,relief="solid",justify='center',font="Arial 13" )
         self.BoxText1.place(x=120,y=100,width=398,height=40)
-        
-        
-
-
-
-
-

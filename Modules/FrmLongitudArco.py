@@ -2,13 +2,12 @@ from tkinter import *
 from tkinter.font import BOLD
 from tkinter import messagebox as MessageBox
 from sympy import diff,integrate,sqrt,symbols,init_printing,plotting
-import matplotlib.pyplot as plt
-
+from datetime import datetime
 
 x = symbols("x")
 init_printing(use_unicode=True)
 
-class LongArco(Frame):
+class frm_longitud_arco(Frame):
     
     def __init__(self, root=  None):
         super().__init__(root,width=650,height=500,background="#F3F4ED")
@@ -82,9 +81,9 @@ class LongArco(Frame):
             funcionFX = self.tboxReciveFunction.get()
             imagGrap = plotting.plot(funcionFX,(x,self.tboxinferirorLim.get(),self.tboxsuperiorLim.get()),show=False,title="Gráfica de f(x):")
             backend = imagGrap.backend(imagGrap)
-            
             backend.process_series()
-            #backend.fig.savefig('.\Graph01.png', dpi=300) -> En caso  de querer almacenar la grafica
+            datetime_now = datetime.now()
+            backend.fig.savefig(f'./{datetime_now}.png', dpi=300)
             backend.show() 
                
     def boxValidation(self):
