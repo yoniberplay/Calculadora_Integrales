@@ -49,8 +49,8 @@ class frm_integral_definida(Frame):
             contador-=1
             self.resultado_entry.delete(contador, END)
             
-    ##--------------> Funcion para integrar<---------------------------------
-    def resultado(self):
+
+    def resultado(self): #@Yoniber Encarnacion
         try:
             sym = None
             funcion_string = self.funcion_entry.get()
@@ -65,7 +65,7 @@ class frm_integral_definida(Frame):
                 self.resultado_entry.config(state="disabled")
             else:
                 self.resultado_entry.delete(0, END)
-                self.resultado_entry.insert(END, "Error..complete todos los campos.")
+                self.resultado_entry.insert(END, "Error.. Debe rellenar todos los campos.")
         except SympifyError:
             self.resultado_entry.insert(END, "Error.")
             

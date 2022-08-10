@@ -35,31 +35,31 @@ class frm_longitud_arco(Frame):
         self.funcion_entry.delete(contador,END)
 
    
-    def graficar(self,funcionFX,infLim,supLim):
+    def graficar(self,funcionFX,limiteinf,limitesup): #@Yoniber Encarnacion
        try:
            if(self.validar_campos()):
-            resultList = []
-            #Derivada de la funcion:
+            List = []
+            #Primero derivamos las funcion.
             diferenciaFX = diff(funcionFX, self.x)
-            #Funcion de la longitud de arco:
+            #Segundo ejecutamos la Funcion de la longitud de arco:
             funIntegral = sqrt(1 + (diferenciaFX)**2)
-            #Aplicando la formula de longitud de arco (Integral):
+            #Aplicando la formula de longitud de arco evaluando la Integral:
             longArcoExpre = integrate(funIntegral,self.x)
 
-            inf = longArcoExpre.subs(self.x,infLim)
-            sup = longArcoExpre.subs(self.x,supLim)
+            inf = longArcoExpre.subs(self.x,limiteinf)
+            sup = longArcoExpre.subs(self.x,limitesup)
                         
             longArcoNeta = sup-inf
-            resultList.append(funcionFX)
-            resultList.append(diferenciaFX)
-            resultList.append(funIntegral)
-            resultList.append((infLim,supLim))
-            resultList.append(longArcoExpre)
-            resultList.append(longArcoNeta.evalf())
+            List.append(funcionFX)
+            List.append(diferenciaFX)
+            List.append(funIntegral)
+            List.append((limiteinf,limitesup))
+            List.append(longArcoExpre)
+            List.append(longArcoNeta.evalf())
             
             self.resultado_entry.insert(END, resultList[-1])
        except:
-            MessageBox.showinfo(title="Error",message="Función incorrecta")
+            MessageBox.showinfo(title="Error",message="Debe introducir la funcion correctamente.!")
 
 
     def graficar_funcion(self):
@@ -68,15 +68,15 @@ class frm_longitud_arco(Frame):
             graph = plotting.plot(funcionFX,(self.x,self.limite_inferior_entry.get(),self.limite_superior_entry.get()),show=False,title="f(x)")
             datetime_now = str(datetime.now().timestamp())
             graph.save(f"./Resources/Graphs/{datetime_now}.png")
-            backend = graph.backend(graph)
-            backend.process_series()
+            back = graph.backend(graph)
+            back.process_series()
 
-            backend.show() 
+            back.show()
                
     def validar_campos(self):
         isValid = True
         if(self.limite_inferior_entry.get() == "" or self.limite_superior_entry.get() == ""):
-            result = MessageBox.askquestion(title="Límites Vacios", message="Por favor asegúrese de que todos los campos estén rellenos. \n Si no especifica, los limites por defecto estos serán [-1 , 1]. ¿Está de acuerdo con esta selección?")
+            result = MessageBox.askquestion(title="Debe introducir los limites.", message="Debe introducir los limites. \n Si no especifica, los limites por defecto estos serán [-1 , 1]. ¿Está de acuerdo con esta selección?")
             if(result == MessageBox.YES):
                 self.limite_inferior_entry.insert(END,"1")
                 self.limite_superior_entry.insert(END,"-1")
@@ -249,7 +249,7 @@ class frm_longitud_arco(Frame):
                                    command=lambda: self.setFuction("/"))
         self.division_btn.grid(row=9, column=4)
 
-        # Boton de resultado y etc
+        # Boton de resultado.
 
         self.grafica_btn = Button(self, text="Grafica", width=7, height=2, relief="solid", background="#377DFF",
                                   command=lambda: self.graficar_funcion())

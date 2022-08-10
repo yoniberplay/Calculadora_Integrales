@@ -32,7 +32,7 @@ class frm_integral_indefinida(Frame):
             self.resultado_entry.delete(contador, END)
 
 
-    def resultado(self):
+    def resultado(self): #@Christopher Montero
         try:
             if(self.funcion_entry.get()!= ""):
                 self.resultado_entry.delete(0, END)
@@ -40,7 +40,7 @@ class frm_integral_indefinida(Frame):
                 self.resultado_entry.insert(END, "+ C")
             else:
                 self.resultado_entry.delete(0, END)
-                self.resultado_entry.insert(END, "Error..complete el campo.")
+                self.resultado_entry.insert(END, "Error.. debe rellenar todos los campos.")
         except SympifyError:
             self.resultado_entry.insert(END, "Error")
     
