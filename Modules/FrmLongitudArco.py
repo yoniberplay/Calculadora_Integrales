@@ -35,7 +35,7 @@ class frm_longitud_arco(Frame):
         self.funcion_entry.delete(contador,END)
 
    
-    def graficar(self,funcionFX,limiteinf,limitesup): #@Yoniber Encarnacion
+    def graficar(self,funcionFX,infLim,supLim): #(3/2)*x**(2/3)+4
        try:
            if(self.validar_campos()):
             List = []
@@ -43,21 +43,22 @@ class frm_longitud_arco(Frame):
             diferenciaFX = diff(funcionFX, self.x)
             #Segundo ejecutamos la Funcion de la longitud de arco:
             funIntegral = sqrt(1 + (diferenciaFX)**2)
-            #Aplicando la formula de longitud de arco evaluando la Integral:
+            #Aplicando la formula de longitud de arco evaluando la :
             longArcoExpre = integrate(funIntegral,self.x)
 
-            inf = longArcoExpre.subs(self.x,limiteinf)
-            sup = longArcoExpre.subs(self.x,limitesup)
+            inf = longArcoExpre.subs(self.x,infLim)
+            sup = longArcoExpre.subs(self.x,supLim)
                         
             longArcoNeta = sup-inf
             List.append(funcionFX)
             List.append(diferenciaFX)
             List.append(funIntegral)
-            List.append((limiteinf,limitesup))
+            List.append((infLim,supLim))
             List.append(longArcoExpre)
             List.append(longArcoNeta.evalf())
-            
-            self.resultado_entry.insert(END, resultList[-1])
+
+            self.resultado_entry.insert(END, List[-1])
+
        except:
             MessageBox.showinfo(title="Error",message="Debe introducir la funcion correctamente.!")
 
