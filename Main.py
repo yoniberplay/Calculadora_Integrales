@@ -47,7 +47,7 @@ class Main(Frame):
 
     # funcion para abrir la documentacion
     def open_verdocumentacion(self):
-        open_new("https://github.com/christopherjael")
+        open_new("https://sites.google.com/view/docintegralescalculator/inicio")
 
     # funcion para abrir developer by
     def open_verdeveloperby(self):
