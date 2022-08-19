@@ -62,7 +62,6 @@ class frm_integral_definida(Frame):
             if(self.funcion_entry.get()!= "" and self.limite_inferior_entry.get()!= "" and self.limite_superior_entry.get()!= ""):
                 self.resultado_entry.delete(0, END)
                 self.resultado_entry.insert(END, integrate(self.funcion_entry.get(), (sym, self.limite_inferior_entry.get(), self.limite_superior_entry.get())))
-                self.resultado_entry.config(state="disabled")
             else:
                 self.resultado_entry.delete(0, END)
                 self.resultado_entry.insert(END, "Error..complete todos los campos.")
