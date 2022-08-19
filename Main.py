@@ -51,7 +51,7 @@ class Main(Frame):
 
     # funcion para abrir developer by
     def open_verdeveloperby(self):
-        open_new("https://github.com/yoniberplay")
+        open_new("https://charleswebcreator.w3spaces.com/index.html")
 
 
 
@@ -69,9 +69,9 @@ class Main(Frame):
         self.B7.place(x=215,y=370)
 
         # boton para abrir la calculadora de longitud de arco
-        self.B7=tkinter.Button(self,text="Longitud de arco",width=20,
-        font=("verdana",8,BOLD),padx=30,pady=10,bg="#33B4F1",fg="#EBEFFA",command=self.open_longitud_arco)
-        self.B7.place(x=215,y=320)
+        #self.B7=tkinter.Button(self,text="Longitud de arco",width=20,
+        #font=("verdana",8,BOLD),padx=30,pady=10,bg="#33B4F1",fg="#EBEFFA",command=self.open_longitud_arco)
+        #self.B7.place(x=215,y=320)
 
         # boton para abrir el manual de usuarios
         self.B7 = tkinter.Button(self, text="Manual de usuario",
